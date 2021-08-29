@@ -4,6 +4,7 @@
 
 const inputBox = document.querySelector(".inputField input");
 const inputBtn = document.querySelector(".inputField button");
+const todoList = document.querySelector(".todoList");
 
 inputBox.onkeyup = ()=>{
 	let userData =inputBox.value; // here we want user to enter the todo task 
@@ -15,6 +16,8 @@ inputBox.onkeyup = ()=>{
 	}
 }
 
+
+showTask();
 
 // now if user click on the button to add new task 
 
@@ -34,8 +37,12 @@ inputBtn.onclick = () => {
 	}
 	listArr.push(userData); // adding the new todo in array
 	localStorage.setItem("New Todo",JSON.stringify(listArr));  // converting json object into string 
+
+	showTask();
 }
 
+
+//this is the finction to add  task to the ul list 
 
 function showTask(){
 	let getLocalStorage = localStorage.getItem("New Todo"); // getting data from local storage
@@ -46,5 +53,45 @@ function showTask(){
 		listArr=JSON.parse(getLocalStorage);  // converting the data from json to js object  
 
 	}
-	
+
+	let newLiTag ='';
+	listArr.forEach((element,index) =>{
+		newLiTag  += `<li>${element}<span onclick="deleteTask(${index})"><i class="fas fa-trash"></i></span></li>`;
+
+	});
+
+	todoList.innerHTML = newLiTag; //adding new LI tag hence displaying task 
+	inputBox.value='';
+
 }
+
+
+// function to delete the task when completed
+
+function deleteTask(index){
+
+	let getLocalStorage = localStorage.getItem("New Todo");
+	listArr = JSON.parse(getLocalStorage);
+
+	listArr.splice(index,1); //delete the element at the particular index
+
+	
+	localStorage.setItem("New Todo",JSON.stringify(listArr));  // converting json object into string 
+
+	showTask();	
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
